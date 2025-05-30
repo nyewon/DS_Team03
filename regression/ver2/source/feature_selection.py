@@ -4,10 +4,13 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LassoCV
 
 # 1. Load and clean the dataset
-df = pd.read_csv("../../imdb_movies_processed.csv")
+df = pd.read_csv("../imdb_movies_processed.csv")
 df = df.drop(columns=["names", "budget_x"])
+
+df = df.drop(columns=["status_ Post Production", "status_ Released"]) # Almost all values are constant => Remove
+
+X = df.drop(columns=["revenue", "revenue_scaled"]) # remove target
 y = df["revenue_scaled"]
-X = df.drop(columns=["revenue", "revenue_scaled"])
 
 # 2. Use LassoCV to find the optimal alpha
 lasso_cv = LassoCV(cv=5, alphas=np.logspace(-3, 2, 20), random_state=42)

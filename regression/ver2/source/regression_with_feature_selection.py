@@ -10,7 +10,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 pd.set_option('display.max_columns', None)
 
 # 1. Load the data
-df = pd.read_csv("../../imdb_movies_processed.csv")
+df = pd.read_csv("../imdb_movies_processed.csv")
 selected_features = ['score_scaled', 'budget_x_scaled', 'genre_Action', 'genre_Adventure',
                      'genre_Animation', 'genre_Comedy', 'genre_Crime', 'genre_Documentary',
                      'genre_Drama', 'genre_Fantasy', 'genre_History', 'genre_Horror',
@@ -89,4 +89,4 @@ for config in model_configs:
 results_df = pd.DataFrame(results)
 results_df = results_df.sort_values(by="R2", ascending=False).reset_index(drop=True)
 print(results_df.head(5))
-results_df.to_csv("../result/regression_results_lasso.csv", index=False)
+results_df.to_csv("../result/regression_result.csv", index=False)

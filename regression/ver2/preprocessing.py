@@ -5,13 +5,11 @@ from pathlib import Path
 from sklearn.preprocessing import RobustScaler, MultiLabelBinarizer
 
 # ───────────────────────────── 1) 경로
-INPUT_PATH  = Path("imdb_movies.csv")
+INPUT_PATH  = Path("../imdb_movies.csv")
 OUTPUT_PATH = Path("imdb_movies_processed.csv")
 
 # ───────────────────────────── 2) 열 로드
-#리포트용으로 영화제목 포함하면 좋을 것 같습니다.
-#모덱 학습용에서는 제목 제외하면 될 것 같습니다.ex)df_model  = df_final.drop(columns=["names"])
-USE_COLS = ["names","score", "genre", "budget_x",
+USE_COLS = ["names","score", "genre", "budget_x", "status",
             "revenue", "date_x", "orig_lang", "country"]
 df = pd.read_csv(INPUT_PATH, usecols=USE_COLS, encoding="utf-8")
 
@@ -77,7 +75,10 @@ df["country"] = group_top_n(df["country"])
 # 원-핫 인코딩
 df = pd.get_dummies(df, columns=["orig_lang", "country"], prefix=["lang", "country"], drop_first=True)
 
-# ───────────────────────────── 7) 저장
+# ───────────────────────────── 7) status 원-핫 인코딩
+df = pd.get_dummies(df, columns=["status"], drop_first=True)
+
+# ───────────────────────────── 8) 저장
 df.to_csv(OUTPUT_PATH, index=False, encoding="utf-8")
 print("preprocessing finished:", df.shape)
 print("saved to:", OUTPUT_PATH)

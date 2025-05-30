@@ -4,10 +4,13 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LassoCV
 
 # 데이터 로드 및 정리
-df = pd.read_csv("../../imdb_movies_processed.csv")
+df = pd.read_csv("../imdb_movies_processed.csv")
 df = df.drop(columns=["names", "budget_x"])
+
+df = df.drop(columns=["status_ Post Production", "status_ Released"]) # Almost all values are constant => Remove
+
+X = df.drop(columns=["revenue", "revenue_scaled"]) # remove target
 y = df["revenue_scaled"]
-X = df.drop(columns=["revenue", "revenue_scaled"])
 
 # LassoCV 학습
 alphas_to_test = np.logspace(-3, 2, 20)  # alpha 값 범위
