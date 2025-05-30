@@ -1,6 +1,5 @@
 import pandas as pd
-from sklearn.tree import DecisionTreeRegressor, plot_tree
-import matplotlib.pyplot as plt
+from sklearn.tree import DecisionTreeRegressor
 
 # 1. 데이터 로드
 df = pd.read_csv("../../imdb_movies_processed.csv")
