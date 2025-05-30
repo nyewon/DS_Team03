@@ -2,24 +2,29 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import KFold
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import PolynomialFeatures, StandardScaler
-from sklearn.linear_model import LinearRegression, Lasso
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 pd.set_option('display.max_columns', None)
 
-# 데이터 로드
-df = pd.read_csv("../imdb_movies_processed.csv")
-df = df.drop(columns=['revenue_scaled', "names", "budget_x"])  # 사용 안할 컬럼 제거
+# 1. Load the data
+df = pd.read_csv("../../../term_ver3/imdb_movies_processed.csv")
+selected_features = ['score_scaled', 'budget_x_scaled', 'genre_Action', 'genre_Adventure',
+                     'genre_Animation', 'genre_Crime', 'genre_Documentary', 'genre_Drama',
+                     'genre_Family', 'genre_Fantasy', 'genre_History', 'genre_Horror',
+                     'genre_Mystery', 'genre_Science Fiction', 'genre_TV Movie',
+                     'genre_Thriller', 'genre_War']
+X = df[selected_features]
+y = df['revenue']
 
-# 평가 결과 저장용 리스트
+df_selected = pd.concat([X, y], axis=1)
+
+# 2. Define models and hyperparameters
+kf = KFold(n_splits=5, shuffle=True, random_state=42)
 results = []
 
-# 교차검증 설정
-kf = KFold(n_splits=5, shuffle=True, random_state=42)
-
-# 모델별 파라미터 수동 설정
 model_configs = [
     {
         "name": "Linear Regression",
@@ -32,11 +37,6 @@ model_configs = [
         "param_list": [{"degree": d} for d in [2, 3]]
     },
     {
-        "name": "Lasso Regression",
-        "model_cls": Lasso,
-        "param_list": [{"alpha": a} for a in [0.01, 0.1, 1, 10]]
-    },
-    {
         "name": "Decision Tree",
         "model_cls": DecisionTreeRegressor,
         "param_list": [
@@ -47,29 +47,26 @@ model_configs = [
     }
 ]
 
-# 모델별 교차검증
+# 3. Train and evaluate models using cross-validation
 for config in model_configs:
     for params in config["param_list"]:
         mse_list, mae_list, r2_list = [], [], []
 
-        for train_idx, test_idx in kf.split(df):
-            train_df = df.iloc[train_idx].copy()
-            test_df = df.iloc[test_idx].copy()
+        for train_idx, test_idx in kf.split(df_selected):
+            train_df = df_selected.iloc[train_idx]
+            test_df = df_selected.iloc[test_idx]
 
-            # 타겟 컬럼 제거
             X_train = train_df.drop(columns=["revenue"])
-            X_test = test_df.drop(columns=["revenue"])
-
             y_train = train_df["revenue"]
+            X_test = test_df.drop(columns=["revenue"])
             y_test = test_df["revenue"]
 
             steps = []
-
             if config["name"] == "Polynomial Regression":
-                steps.append(('poly', PolynomialFeatures(degree=params['degree'])))
-                steps.append(('model', config["model_cls"]()))
+                steps.append(("poly", PolynomialFeatures(degree=params["degree"])))
+                steps.append(("model", config["model_cls"]()))
             else:
-                steps.append(('model', config["model_cls"](**params)))
+                steps.append(("model", config["model_cls"](**params)))
 
             model = Pipeline(steps)
             model.fit(X_train, y_train)
@@ -87,8 +84,8 @@ for config in model_configs:
             "R2": np.mean(r2_list)
         })
 
-# 결과 정리
+# 4. Output and save results
 results_df = pd.DataFrame(results)
 results_df = results_df.sort_values(by="R2", ascending=False).reset_index(drop=True)
-results_df.to_csv("regression_results.csv", index=False)
 print(results_df.head(5))
+results_df.to_csv("../result/regression_result.csv", index=False)
