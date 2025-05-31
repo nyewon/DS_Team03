@@ -17,7 +17,7 @@ X = df[feature_columns].values
 y = df['is_hit'].values
 
 #threshold 설정
-thresholds = [0.3, 0.5, 0.7]
+thresholds = [0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
 #K-fold(K=5)로 검증
 kf = KFold(n_splits=5, shuffle=True, random_state=42)
@@ -62,12 +62,15 @@ for threshold in thresholds:
     print(f"F1 Score: {np.mean([r['1']['f1-score'] for r in reports]):.4f}")
 
 #각 threshold에 대한 confusion matrix plot걀과
-fig, axes = plt.subplots(1, 3, figsize=(15, 4))
+fig, axes = plt.subplots(2, 3, figsize=(15, 8))
+
+axes = axes.flatten()
 
 for i, (thresh, cm) in enumerate(zip(thresholds, avg_conf_matrices)):
     disp = ConfusionMatrixDisplay(confusion_matrix=cm)
     disp.plot(ax=axes[i], values_format='d')
     axes[i].set_title(f"Threshold = {thresh:.1f}")
+
 
 plt.tight_layout()
 plt.show()
