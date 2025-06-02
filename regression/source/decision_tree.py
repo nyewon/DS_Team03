@@ -24,11 +24,11 @@ dot_data = export_graphviz(model,
                            filled=True,                       # Fill node color based on prediction value
                            rounded=True,                      # Round the node boxes
                            special_characters=True,
-                           max_depth=4                        # Limit the depth shown in the tree
+                           max_depth=3                        # Limit the depth shown in the tree
                            )
 
 # Create a Graphviz graph from the DOT data
 graph = Source(dot_data)
 
 # Render the graph as a PNG image and save to 'plot/decision_tree.png'
-graph.render("plot/decision_tree", format="png", cleanup=True)
+graph.render("../plot/decision_tree", format="png", cleanup=True)
