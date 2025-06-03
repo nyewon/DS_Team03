@@ -4,13 +4,12 @@ from pathlib import Path
 from src.eda import run_eda
 from src.logistic import run_logistic
 from src.roc_curve import run_roc
-from src.decision_tree import run_decision_tree
+from src.decision_tree import run_decision_tree_regressor
 from src.decision_tree_gini import run_decision_tree_gini
 from src.decision_tree_entropy import run_decision_tree_entropy
 from src.regression import run_regression
 from src.overfitting_analysis import run_overfitting_analysis
 from src.feature_importance import run_feature_importance
-from src.term_ver3 import run_term_analysis
 
 
 def parse_args():
@@ -32,9 +31,6 @@ def main():
     args = parse_args()
     Path("outputs").mkdir(exist_ok=True)
 
-    if args.stage in ("term", "all"):
-        run_term_analysis()
-
     if args.stage in ("eda", "all"):
         run_eda()
 
@@ -45,7 +41,7 @@ def main():
         run_roc()
 
     if args.stage in ("tree", "all"):
-        run_decision_tree()
+        run_decision_tree_regressor()
 
     if args.stage in ("tree_gini", "all"):
         run_decision_tree_gini()

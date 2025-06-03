@@ -1,24 +1,38 @@
-def run_decision_tree():
+def run_decision_tree_regressor():
+    """Train a Decision Tree Regressor and export a visualized tree."""
     import pandas as pd
-    import matplotlib.pyplot as plt
-    from sklearn.tree import DecisionTreeClassifier, plot_tree
-    from sklearn.model_selection import train_test_split
+    from sklearn.tree import DecisionTreeRegressor, export_graphviz
+    from graphviz import Source
+    import os
 
-    df = pd.read_csv("./eda/imdb_movies_processed.csv")
-    X = df.drop(columns=["success"])
-    y = df["success"]
+    # Load the dataset
+    df = pd.read_csv("src/imdb_movies_processed.csv")
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    # Define the features for training (exclude unwanted columns)
+    selected_features = df.drop(columns=["names", "revenue", "revenue_scaled", "budget_x"]).columns.tolist()
+    X = df[selected_features]
+    y = df['revenue']
 
-    model = DecisionTreeClassifier(criterion="gini", max_depth=4)
-    model.fit(X_train, y_train)
+    # Train the Decision Tree Regressor
+    model = DecisionTreeRegressor(max_depth=5, min_samples_split=10, random_state=42)
+    model.fit(X, y)
 
-    plt.figure(figsize=(10, 6))
-    plot_tree(model, feature_names=X.columns, class_names=True, filled=True)
-    plt.title("Decision Tree")
-    plt.savefig("outputs/decision_tree.png")
-    plt.close()
-    print("[✓] decision_tree.py")
+    # Export tree in DOT format for visualization
+    dot_data = export_graphviz(
+        model,
+        out_file=None,
+        feature_names=selected_features,
+        filled=True,
+        rounded=True,
+        special_characters=True,
+        max_depth=3
+    )
+
+    graph = Source(dot_data)
+    os.makedirs("outputs", exist_ok=True)
+    graph.render("outputs/decision_tree_regressor", format="png", cleanup=True)
+
+    print("[✓] decision_tree.py (regressor) done")
 
 if __name__ == "__main__":
-    run_decision_tree()
+    run_decision_tree_regressor()
