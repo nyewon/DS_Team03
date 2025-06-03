@@ -5,6 +5,45 @@
 > Course: *Data Science*, Prof. Eom Gwang-hyeon, Spring 2025. :contentReference[oaicite:0]{index=0}
 
 ---
+## Quick Start 🚀
+
+> **Prerequisites**  
+> * Python 3.9 or newer  
+> * Git  
+> * Graphviz system binaries (`dot`) – see installation note below  
+
+```bash
+# ① Clone the repo
+git clone https://github.com/nyewon/DS_Team03.git
+cd DS_Team03
+
+# ② Create & activate a virtual environment
+#    Windows (PowerShell)
+python -m venv .venv
+.venv\Scripts\Activate.ps1           # older CMD → .venv\Scripts\activate.bat
+
+#    macOS / Linux
+python3 -m venv .venv
+source .venv/bin/activate
+
+# ③ Install Python dependencies
+pip install --upgrade pip
+pip install -r requirements.txt      # scikit-learn, pandas, graphviz (Python wrapper) …
+
+# ④ (Windows only) Ensure Graphviz system package is installed
+#    Download & run installer: https://graphviz.gitlab.io/download/
+#    Add  C:\Program Files\Graphviz\bin  to your PATH, then reopen the terminal.
+dot -V                               # should print version info
+
+# ⑤ Run the entire pipeline (EDA → ML → outputs/)
+python run_pipeline.py
+
+# ⑥ Run a single stage (e.g. logistic-regression only)
+python run_pipeline.py --stage logistic
+
+# ⑦ Deactivate env when done
+deactivate
+```
 
 ## Table of Contents
 1. [Problem Statement](#problem-statement)
@@ -14,9 +53,7 @@
 5. [Exploratory Data Analysis](#exploratory-data-analysis)
 6. [Modeling & Results](#modeling--results)
 7. [How to Reproduce](#how-to-reproduce)
-8. [Open-Source Contribution](#open-source-contribution)
-9. [Team](#team)
-10. [License](#license)
+8. [Team](#team)
 
 ---
 
@@ -100,12 +137,6 @@ python src/train_regression.py --config configs/reg_tree.yml
 # 4. Train classifier
 python src/train_classify.py --config configs/logreg.yml
 ```
----
-
-## Open-Source Contribution
-A cleaned, ready-to-model dataset is published on Kaggle:
-https://www.kaggle.com/datasets/wongeunhan/imdb-movies-processed-team-3-2025
-
 ---
 
 
