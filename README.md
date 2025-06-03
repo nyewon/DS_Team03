@@ -99,10 +99,17 @@ python src/train_regression.py --config configs/reg_tree.yml
 
 # 4. Train classifier
 python src/train_classify.py --config configs/logreg.yml
+```
+---
 
-Open-Source Contribution
+## Open-Source Contribution
 A cleaned, ready-to-model dataset is published on Kaggle:
 https://www.kaggle.com/datasets/wongeunhan/imdb-movies-processed-team-3-2025
+
+---
+
+
+## Team
 
 | ID        | Name              | Role                              |
 | --------- | ----------------- | --------------------------------- |
@@ -110,3 +117,5 @@ https://www.kaggle.com/datasets/wongeunhan/imdb-movies-processed-team-3-2025
 | 201935147 | **Chu Dong-hyuk** | Classification, presentation      |
 | 202131791 | **Han Won-geun**  | Pre-processing, GitHub/Kaggle ops |
 | 202234885 | **No Ye-won**     | EDA & visualisation               |
+
+---
