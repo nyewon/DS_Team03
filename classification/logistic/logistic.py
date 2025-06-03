@@ -6,7 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report
 
 #데이터 불러오기
-df = pd.read_csv("../term_ver3/imdb_movies_processed.csv")
+df = pd.read_csv("../../term_ver3/imdb_movies_processed.csv")
 
 #흥행 여부(수익)를 라벨로 설정
 df['is_hit'] = (df['revenue'] > df['budget_x']).astype(int)
@@ -22,6 +22,8 @@ thresholds = [0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 #K-fold(K=5)로 검증
 kf = KFold(n_splits=5, shuffle=True, random_state=42)
 avg_conf_matrices = []
+
+
 
 for threshold in thresholds:    
     fold_cms = []
@@ -60,6 +62,28 @@ for threshold in thresholds:
     print(f"Precision: {np.mean([r['1']['precision'] for r in reports]):.4f}")
     print(f"Recall: {np.mean([r['1']['recall'] for r in reports]):.4f}")
     print(f"F1 Score: {np.mean([r['1']['f1-score'] for r in reports]):.4f}")
+
+    print("\n[Model Coefficients]")
+    coef = model.coef_[0]
+    intercept = model.intercept_[0]
+    for name, value in zip(feature_columns, coef):
+        direction = "↑" if value > 0 else "↓"
+        print(f"{name}: {value:.4f} ({direction} 양성 확률)")
+    print(f"Intercept: {intercept:.4f}")
+
+    # ✅ Feature 계수 시각화 추가
+    plt.figure(figsize=(12, 6))
+    sorted_idx = np.argsort(coef)
+    sorted_names = [feature_columns[i] for i in sorted_idx]
+    sorted_weights = coef[sorted_idx]
+    colors = ["red" if w < 0 else "blue" for w in sorted_weights]
+
+    plt.barh(sorted_names, sorted_weights, color=colors)
+    plt.axvline(0, color='black', linewidth=0.8)
+    plt.title(f"Feature Coefficients (Threshold = {threshold})")
+    plt.xlabel("Coefficient Value")
+    plt.tight_layout()
+    plt.show()
 
 #각 threshold에 대한 confusion matrix plot걀과
 fig, axes = plt.subplots(2, 3, figsize=(15, 8))
