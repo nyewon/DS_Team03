@@ -1,16 +1,16 @@
 import argparse
 from pathlib import Path
 
-from eda import run_eda
-from logistic import run_logistic
-from roc_curve import run_roc
-from decision_tree import run_decision_tree
-from decision_tree_gini import run_decision_tree_gini
-from decision_tree_entropy import run_decision_tree_entropy
-from regression import run_regression
-from overfitting_analysis import run_overfitting_analysis
-from feature_importance import run_feature_importance
-from term_ver3 import run_term_analysis
+from src.eda import run_eda
+from src.logistic import run_logistic
+from src.roc_curve import run_roc
+from src.decision_tree import run_decision_tree
+from src.decision_tree_gini import run_decision_tree_gini
+from src.decision_tree_entropy import run_decision_tree_entropy
+from src.regression import run_regression
+from src.overfitting_analysis import run_overfitting_analysis
+from src.feature_importance import run_feature_importance
+from src.term_ver3 import run_term_analysis
 
 
 def parse_args():
