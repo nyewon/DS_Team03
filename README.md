@@ -120,25 +120,47 @@ Full raw dataset link → <https://www.kaggle.com/datasets/ashpalsingh1525/imdb-
 
 ---
 
-## How to Reproduce
-```bash
-# 1. Clone & set up
-git clone https://github.com/nyewon/DS_Team03.git
-cd DS_Team03
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+## Module Overview
 
-# 2. Pre-process data
-python src/preprocess.py --input data/imdb_movies_raw.csv --output data/imdb_movies_processed.csv
+### 📁 preprocessing/
+| File | Main Function | Description |
+|------|---------------|-------------|
+| `preprocessing.py` | `run_preprocessing()` | Loads raw CSV, handles missing values, applies scaling & encoding, and outputs `imdb_movies_processed.csv`. |
 
-# 3. Train regression
-python src/train_regression.py --config configs/reg_tree.yml
+### 📁 eda/
+| File | Main Function | Description |
+|------|---------------|-------------|
+| `eda.py` | `run_eda()` | Generates visualizations: revenue distribution, budget vs. revenue, genre-wise success rates, and correlation heatmap. |
 
-# 4. Train classifier
-python src/train_classify.py --config configs/logreg.yml
-```
+### 📁 regression/
+| File | Main Function | Description |
+|------|---------------|-------------|
+| `decision_tree.py` | `run_decision_tree_regression()` | Trains a decision tree regressor and saves visualization as `.png`. |
+| `feature_importance.py` | `run_feature_importance()` | Visualizes feature importances from the regression model. |
+| `overfitting_analysis.py` | `run_overfitting_analysis()` | Evaluates overfitting via RMSE gap across different tree parameters. |
+| `regression.py` | `run_regression()` | Compares multiple regression models (Linear, Lasso, Polynomial, Tree) and outputs top 5 by RMSE. |
+
+### 📁 classification/
+| File | Main Function | Description |
+|------|---------------|-------------|
+| `logistic.py` | `run_logistic()` | Trains a logistic regression classifier for hit prediction. |
+| `roc_curve.py` | `run_roc()` | Plots the ROC curve for classification models. |
+| `decision_tree_entropy.py` | `run_decision_tree_entropy()` | Classifies using a decision tree (entropy criterion) and visualizes results. |
+| `decision_tree_gini.py` | `run_decision_tree_gini()` | Same as above but using Gini impurity as the splitting criterion. |
+
+### 📁 src/
+| File | Description |
+|------|-------------|
+| `run_pipeline.py` | The main controller script. Supports full or staged execution using `argparse`. |
+
+### 📁 outputs/
+- Contains output artifacts such as visualizations (`.png`), result tables (`.csv`), organized by task:
+  - `preprocessing/`
+  - `eda/`
+  - `regression/`
+  - `classification/`
+
 ---
-
 
 ## Team
 
@@ -147,6 +169,6 @@ python src/train_classify.py --config configs/logreg.yml
 | 201935027 | **Kim Jae-hee**   | Regression, slides                |
 | 201935147 | **Chu Dong-hyuk** | Classification, presentation      |
 | 202131791 | **Han Won-geun**  | Pre-processing, GitHub/Kaggle ops |
-| 202234885 | **No Ye-won**     | EDA & visualisation               |
+| 202234885 | **Noh Ye-won**     | EDA & visualisation               |
 
 ---

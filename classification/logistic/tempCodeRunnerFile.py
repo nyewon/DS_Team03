@@ -1,1 +1,0 @@
-fig.delaxes(axes[-1])
